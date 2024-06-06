@@ -6,13 +6,17 @@
 interface StateI {
 }
 
-type StateValue = string | number | boolean;
-type StateStore = Record<string, StateValue>
+type Expression = `${string}=${number}`
+  | `${string}=str(${string})`
+  | `${string}=True`
+  | `${string}=False`
 
 export class State implements StateI {
-  private store: StateStore;
+  private StateExp: Expression[];
 
-  constructor(initialState?: Record<string, StateValue>) {
-    this.store = initialState ?? {};
+  constructor(...initialState: Expression[]) {
+    this.StateExp = initialState ?? [];
   }
 }
+
+let a = new State('a=True', 'b=str(1)','c=100');
