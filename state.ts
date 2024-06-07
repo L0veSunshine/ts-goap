@@ -6,10 +6,21 @@
 interface StateI {
 }
 
-type Expression = `${string}=${number}`
-  | `${string}=str(${string})`
+type AssignExpression = `${string}=${number}`
+  | `${string}="${string}"`
   | `${string}=True`
   | `${string}=False`
+
+type BinaryCmpExpression =
+  `${string}<${number}`
+  | `${string}<=${number}`
+  | `${string}==${number}`
+  | `${string}>${number}`
+  | `${string}>=${number}`
+
+type BinaryOpExpression = `${string}=${string}-${string}` | `${string}=${string}+${string}`
+
+type Expression = AssignExpression | BinaryCmpExpression | BinaryOpExpression
 
 export class State implements StateI {
   private StateExp: Expression[];
@@ -18,5 +29,3 @@ export class State implements StateI {
     this.StateExp = initialState ?? [];
   }
 }
-
-let a = new State('a=True', 'b=str(1)','c=100');
