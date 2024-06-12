@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "Goal-Oriented Action Planning for TypeScript",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "jest"
   },

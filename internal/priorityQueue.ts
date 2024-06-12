@@ -49,7 +49,7 @@ interface PriorityQueueI<T> {
 
 class PriorityQueue<T> implements PriorityQueueI <T> {
   private _queue: T[];
-  private readonly _comparator: (item1: T, item2: T) => boolean = (item1, item2) => item1 < item2;
+  private readonly _comparator: (item1: T, item2: T) => boolean = (item1, item2) => item1 > item2;
 
   constructor(comparator?: (item1: T, item2: T) => boolean) {
     this._queue = [];
@@ -175,7 +175,7 @@ class PriorityQueue<T> implements PriorityQueueI <T> {
       childIndex2 = 2 * index + 2;
       swapIndex = childIndex1;
 
-      if (this._comparator(this._queue[childIndex1], this._queue[childIndex2])) {
+      if (childIndex2 < this._queue.length && this._comparator(this._queue[childIndex1], this._queue[childIndex2])) {
         swapIndex = childIndex2;
       }
 
