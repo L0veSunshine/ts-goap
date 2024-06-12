@@ -32,7 +32,6 @@ export class Parser {
     }
   }
 
-
   parseAssignExpression(): Statement {
     const identity = this.currentToken;
     this.next();
@@ -84,7 +83,7 @@ export class Parser {
 export type Env = Record<string, string | number | boolean>
 
 export class StateEnv {
-  private readonly env: Env = {};
+  private env: Env = {};
 
   constructor(initEnv?: Env) {
     if (initEnv != null) {
@@ -94,6 +93,10 @@ export class StateEnv {
 
   get getEnv() {
     return this.env;
+  }
+
+  set setEnv(env: Env) {
+    this.env = env;
   }
 
   run(statement: Statement) {

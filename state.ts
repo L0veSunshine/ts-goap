@@ -1,15 +1,12 @@
-import { Env, Parser, StateEnv } from './utils/stateParser';
-import { Lexer } from './utils/lexer';
+import { Env, Parser, StateEnv } from './internal/stateParser';
+import { Lexer } from './internal/lexer';
 
 /**
  *
  * @author Xuan
  * @since 2024/6/6 下午 11:21
  */
-interface StateI {
-}
-
-export class State implements StateI {
+export class State {
   private env: StateEnv;
 
   constructor(initialState?: Env) {
@@ -41,9 +38,22 @@ export class State implements StateI {
   get internal(): Env {
     return this.env.getEnv;
   }
-}
 
-const s = new State();
-s.execute('a=111', 'b=10', 'alive=true');
-s.execute('a=a+1000', 'b=10', 'alive=true');
-console.log(s.isSatisfy('a>1100', 'a>=2'));
+  merge(data: Env) {
+    this.env.setEnv = Object.assign({}, this.env.getEnv, data);
+  }
+
+  clear() {
+    this.env.setEnv = {};
+  }
+
+  removeKey(key: string) {
+    if (key in this.internal) {
+      delete this.internal[key];
+    }
+  }
+
+  clone(): State {
+    return new State(this.internal);
+  }
+}

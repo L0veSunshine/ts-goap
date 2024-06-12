@@ -6,12 +6,12 @@ import { Action, ActionSet } from './action';
  * @author Xuan
  * @since 2024/6/6 下午 11:21
  */
-class GoapAgent {
+class Agent {
   constructor(start: State, goal: State, actionSet: ActionSet) {
 
   }
 
-  *getAction(): Generator<Action> {
+  * getAction(): Generator<Action> {
 
   }
 }
