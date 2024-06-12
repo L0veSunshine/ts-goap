@@ -25,7 +25,7 @@ export class State {
     }
   }
 
-  isSatisfy(...conditions: string[]): boolean {
+  match(...conditions: string[]): boolean {
     let satisfied: boolean = conditions.length > 0;
     for (const condition of conditions) {
       const l = new Lexer(condition);
