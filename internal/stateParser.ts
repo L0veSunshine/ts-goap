@@ -169,7 +169,16 @@ export class StateEnv {
         return false;
       }
       const current = this.env[key];
-      const wanted = new NodeExpr(statement.value).realValue();
+      let wanted;
+      if (statement.value.type === TokenType.Identity) {
+        if (statement.value.value in this.env) {
+          wanted = this.env[statement.value.value];
+        } else {
+          throw Error(`no var "${statement.value.value}" in env`);
+        }
+      } else {
+        wanted = new NodeExpr(statement.value).realValue();
+      }
       switch (statement.op.value) {
         case '==':
           if (typeof current === typeof wanted) {

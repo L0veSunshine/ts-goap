@@ -1,5 +1,8 @@
 import { Env, Parser, StateEnv } from './internal/stateParser';
 import { Lexer } from './internal/lexer';
+import { AssignStatement, CompareStatement } from './internal/expression';
+
+export type Rule = string
 
 /**
  *
@@ -8,10 +11,25 @@ import { Lexer } from './internal/lexer';
  */
 export class State {
   private env: StateEnv;
+  private conditions: CompareStatement[] = [];
 
-  constructor(initialState?: Env) {
-    if (initialState) {
-      this.env = new StateEnv(initialState);
+  constructor(rules?: Rule[])
+  constructor(State?: Env)
+  constructor(rulesOrState?: Rule[] | Env) {
+    if (typeof rulesOrState === 'object' && !Array.isArray(rulesOrState)) {
+      this.env = new StateEnv(rulesOrState);
+    } else if (rulesOrState) {
+      this.env = new StateEnv();
+      for (const rule of rulesOrState) {
+        const l = new Lexer(rule);
+        const p = new Parser(l);
+        const stmt = p.parse();
+        if (stmt instanceof CompareStatement) {
+          this.conditions.push(stmt);
+        } else if (stmt instanceof AssignStatement) {
+          this.env.run(stmt);
+        }
+      }
     } else {
       this.env = new StateEnv();
     }
@@ -25,14 +43,18 @@ export class State {
     }
   }
 
-  match(...conditions: string[]): boolean {
-    let satisfied: boolean = conditions.length > 0;
-    for (const condition of conditions) {
-      const l = new Lexer(condition);
-      const p = new Parser(l);
-      satisfied = this.env.isSatisfy(p.parse()) && satisfied;
+  cloneAndExecute(...commands: string[]): State {
+    const cloned = this.clone();
+    cloned.execute(...commands);
+    return cloned;
+  }
+
+  match(other: State): boolean {
+    let matched: boolean = other.conditions.length > 0;
+    for (const stmt of other.conditions) {
+      matched = this.env.isSatisfy(stmt) && matched;
     }
-    return satisfied;
+    return matched;
   }
 
   get internal(): Env {

@@ -1,26 +1,42 @@
 import { State } from './state';
 import { Action, ActionSet } from './action';
 import { PriorityQueue } from './internal/priorityQueue';
+import { AStartNode } from './internal/node';
 
 /**
  *
  * @author Xuan
  * @since 2024/6/6 下午 11:21
  */
-class Agent {
-  private startState: State;
-  private goalState: State;
-  private action: ActionSet;
-  private priorityQueue: PriorityQueue<Action>;
+export class Agent {
+  private readonly openList: PriorityQueue<AStartNode>;
+  private readonly closeList: PriorityQueue<AStartNode>;
 
-  constructor(start: State, goal: State, actionSet: ActionSet) {
-    this.startState = start;
-    this.goalState = goal;
-    this.action = actionSet;
-    this.priorityQueue = new PriorityQueue((a, b) => a.cost - b.cost > 0);
+  constructor() {
+    this.openList = new PriorityQueue((a, b) => a.cost > b.cost);
+    this.closeList = new PriorityQueue((a, b) => a.cost > b.cost);
   }
 
-  * getAction(): Generator<Action> {
-
+  plan(current: State, goal: State, actionSet: ActionSet): Action[] {
+    this.openList.clear();
+    this.closeList.clear();
+    const startNode = new AStartNode(goal, current, null, 0, null);
+    this.openList.push(startNode);
+    while (!this.openList.empty()) {
+      const node = this.openList.pop()!;
+      this.closeList.push(node);
+      const reachGoal = node.curState.match(goal);
+      if (reachGoal) {
+        return node.getPlan();
+      }
+      const neighbors = actionSet.getPossibleTrans(node, goal, current);
+      for (const neighbor of neighbors) {
+        // if (this.closeList.contains(neighbor)) {
+        //   continue;
+        // }
+        this.openList.push(neighbor);
+      }
+    }
+    return [];
   }
 }

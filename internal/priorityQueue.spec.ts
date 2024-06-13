@@ -25,4 +25,14 @@ describe('Test Priority Queue', () => {
     queue.push({ name: 'c', cost: 1000 });
     expect(queue.pop()).toEqual({ name: 'b', cost: 1 });
   });
+
+  it('test contain', () => {
+    const queue = new PriorityQueue<number>();
+    queue.push(1);
+    queue.push(10);
+    queue.push(-100);
+    expect(queue.contains(-100)).toBe(true);
+    queue.pop();
+    expect(queue.contains(-100)).toBe(false);
+  });
 });
