@@ -1,11 +1,11 @@
-import { State } from '../state';
-import { Action } from '../action';
-
 /**
  *
  * @author Xuan
  * @since 2024/6/13 上午 02:53
  */
+import { State } from '../state';
+import { Action } from '../action';
+
 export class AStartNode {
   public parent: AStartNode | null;
   public curState: State;

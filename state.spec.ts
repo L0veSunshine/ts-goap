@@ -37,6 +37,16 @@ describe('State', () => {
     expect(s1.match(cond)).toBe(false);
   });
 
+  it('state contain', () => {
+    const s1 = new State(['a=100', 'b=120']);
+    const s2 = new State(['a=100']);
+    const s3 = new State(['c=1']);
+    expect(s2.containsAny(s1)).toBe(true);
+    expect(s1.containsAny(s2)).toBe(true);
+    expect(s1.containsAny(s3)).toBe(false);
+    expect(s3.containsAny(s1)).toBe(false);
+  });
+
   it('clone execute', () => {
     const s = new State(['a=100', 'v=true']);
     const copy = s.cloneAndExecute('a=a+1');

@@ -8,7 +8,7 @@ import { AStartNode } from './internal/node';
  * @author Xuan
  * @since 2024/6/6 下午 11:21
  */
-export class Agent {
+export class Planner {
   private readonly openList: PriorityQueue<AStartNode>;
   private readonly closeList: PriorityQueue<AStartNode>;
 

@@ -57,6 +57,11 @@ export class State {
     return matched;
   }
 
+  containsAny(other: State): boolean {
+    const keys = Object.keys(this.internal);
+    return keys.some(key => other.internal[key] === this.internal[key]);
+  }
+
   get internal(): Env {
     return this.env.getEnv;
   }
